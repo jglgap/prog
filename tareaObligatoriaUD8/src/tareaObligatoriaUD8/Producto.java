@@ -7,10 +7,17 @@ public class Producto {
 
 //hacer un try cath grande dento del construct
 		public Producto(String identificador, String descripcion, double precio) {
-		super();
-		this.identificador = validadorId(identificador) ;
-		this.descripcion = descripcion;
-		this.precio = checkPrecio(precio);
+			try{
+				if(this.checkPrecio(precio) && this.validadorId(identificador)){
+				this.identificador=identificador;
+				this.precio=precio;
+				this.descripcion=descripcion;
+				}
+			}catch(ExceptionValorPrecio e) {
+				e.mensajeException();
+			}catch(ExceptionId e){
+				e.mensajeException();
+			}
 		}
 	
 	
@@ -18,21 +25,27 @@ public class Producto {
 	public Producto() {
 	}
 
-	public double checkPrecio(double precio) {
-	if(precio<0) {
-		System.out.println("el precio no puede ser menor que 0");
-	}
-	return this.precio;
-	}//cierre de metodo
-
-	public String validadorId(String id) {
-		if(!id.matches("^[A|B|C]-\\d{4}$")) {
-			System.out.println("el id del producto es incorrecto");
-		}else {
-			System.out.println("el formato del identificador es correcto");
-			
+	public boolean  checkPrecio(double precio) throws ExceptionValorPrecio{
+		if(precio<0) {
+		throw new ExceptionValorPrecio();
 		}
-		return identificador;
-		
+		return true;
+			
+	}//final de metodo
+
+	public boolean validadorId(String id) throws ExceptionId {
+		if(!id.matches("^[A|B|C]-\\d{4}$")) {
+			throw new ExceptionId();
+		}else {
+			return true;
+		}
+	}//final metodo
+
+
+
+	@Override
+	public String toString() {
+		return "Producto [identificador=" + identificador + ", descripcion=" + descripcion + ", precio=" + precio + "]";
 	}
+	
 }

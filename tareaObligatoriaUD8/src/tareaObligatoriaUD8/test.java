@@ -7,7 +7,9 @@ public class test {
 		Producto p2= new Producto("Z456","Bread",5);
 		Producto p3= new Producto("A-5891","Corn",-2);
 		
-
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p3.toString());
 	}
 
 }
