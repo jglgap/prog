@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Proba {
@@ -12,12 +13,16 @@ public class Proba {
 			con = (Connection) DriverManager.getConnection(sURL, "alumno", "abc123..");
 			System.out.println("¡Conexión exitosa!");
 			try {
-				String consulta = "select * from employees where nombre = ? ";
+				String consulta = "select * from employees where name = ? ";
 				PreparedStatement sentencia= con.prepareStatement(consulta);
 				sentencia.setString(1,"Pedro Martin");
 				sentencia.executeQuery();
+				ResultSet res= sentencia.executeQuery();
+				while(res.next()) {
+					
+				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
