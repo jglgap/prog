@@ -34,6 +34,14 @@ public static void main(String[] args) {
    		System.out.println("Name: "+rowSet.getString(2));
    		System.out.println("LastName: "+rowSet.getString(3));
    		System.out.println("Age: "+ rowSet.getInt(4));
+   		
+   		rowSet.moveToInsertRow();
+   		rowSet.updateInt("id",5);
+   		rowSet.updateString("name", "PAco");
+   		rowSet.updateString("lastname", "Buyo");
+   		rowSet.updateInt("age", 66);
+   		rowSet.insertRow();
+   		
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
