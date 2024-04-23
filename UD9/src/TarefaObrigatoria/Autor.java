@@ -1,21 +1,26 @@
 package TarefaObrigatoria;
 
+import java.sql.SQLException;
+
+import javax.sql.RowSet;
+
 public class Autor {
-	
+
 	private int idAutor;
-	private String varchar;
+	private String dni;
 	private String apellidos;
 	private String Nombre;
-	
-	public Autor(int idAutor, String varchar, String apellidos, String nombre) {
-		
+
+	public Autor(int idAutor, String dni, String apellidos, String nombre) {
+
 		this.idAutor = idAutor;
-		this.varchar = varchar;
+		this.dni = this.validarDni(dni);
 		this.apellidos = apellidos;
 		Nombre = nombre;
 	}
 
-	public Autor() {}
+	public Autor() {
+	}
 
 	public int getIdAutor() {
 		return idAutor;
@@ -25,12 +30,12 @@ public class Autor {
 		this.idAutor = idAutor;
 	}
 
-	public String getVarchar() {
-		return varchar;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setVarchar(String varchar) {
-		this.varchar = varchar;
+	public void setDni(String varchar) {
+		this.dni = varchar;
 	}
 
 	public String getApellidos() {
@@ -49,6 +54,13 @@ public class Autor {
 		Nombre = nombre;
 	}
 	
-	
-	
+	public String validarDni(String dni) {
+		if(dni.length()!=9 || !dni.matches(".*[T|R|W|A|G|M|Y|F|P|D|X|B|N|J|Z|S|Q|V|H|L]")){
+			return "DNI incorrecto";
+		}else {
+			System.out.println("DNI correcto");
+			return dni;
+		}
+		
+	}
 }

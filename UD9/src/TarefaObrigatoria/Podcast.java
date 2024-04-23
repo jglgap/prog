@@ -1,6 +1,9 @@
 package TarefaObrigatoria;
 
+import java.sql.SQLException;
 import java.util.HashSet;
+
+import javax.sql.RowSet;
 
 public class Podcast {
 
@@ -11,11 +14,12 @@ public class Podcast {
 	private int duracion;
 	private String periocidad;
 	private String videoFormat;
-	private Autor autor;	
-	HashSet <Genero> gen= new HashSet<>();
-	
-	public Podcast(int idPodcast, String titulo, int tipo, String calidad, int duracion, String periodicidad,String videoFormat, Autor autor) {
-		
+	private Autor autor;
+	HashSet<Genero> gen = new HashSet<>();
+
+	public Podcast(int idPodcast, String titulo, int tipo, String calidad, int duracion, String periodicidad,
+			String videoFormat, Autor autor) {
+
 		this.idPodcast = idPodcast;
 		this.titulo = titulo;
 		this.tipo = tipo;
@@ -26,7 +30,8 @@ public class Podcast {
 		this.autor = autor;
 	}
 
-	public Podcast() {}
+	public Podcast() {
+	}
 
 	public int getIdPodcast() {
 		return idPodcast;
@@ -91,6 +96,11 @@ public class Podcast {
 	public void setAutor(Autor autor) {
 		this.autor = autor;
 	}
-	
-	
+
+	public boolean revisarPodcastExistenetes(RowSet rs) throws SQLException {
+		rs.setCommand("select idPodcast from Podcast");
+		rs.execute();
+		return true;
+	}
+
 }

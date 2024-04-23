@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/Users/a23ricardosr/Downloads/commons-dbcp2-2.9.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/a23ricardosr/Downloads/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/a23ricardosr/Downloads/commons-pool2-2.11.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/a23ricardosr/Downloads/dotenv-java-3.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

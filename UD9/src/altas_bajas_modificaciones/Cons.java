@@ -98,7 +98,7 @@ public class Cons implements IPersona {
 					pTemp.setAge(res.getInt(4));
 
 				}
-			}
+			}	
 		}
 		return pTemp;
 	}
