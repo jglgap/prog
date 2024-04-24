@@ -105,11 +105,11 @@ public class Cons implements IPersona {
 public static void main(String[] args) {
 	Cons c= new Cons();
 	try (Connection con= c.openBasicConnection()) {
-		Persona p= new Persona(35,"Miguel","Caamaño",23);
+		Persona p= new Persona(7,"Miguel","Caamaño",3);
 		c.insertPerson(con, p);
-		c.updatePersonAgeById(con, 34, 24);
+		c.updatePersonAgeById(con,7, 24);
 		c.selectAllPeople(con);
-		c.deletePerson(con, 34);
+		c.deletePerson(con, 35);
 		c.maxAgePerson(con);
 		
 	} catch (SQLException e) {

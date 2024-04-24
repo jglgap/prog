@@ -3,6 +3,8 @@ package TarefaObrigatoria;
 import java.sql.SQLException;
 
 import javax.sql.RowSet;
+import javax.sql.rowset.JdbcRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 public class Genero {
 
@@ -33,10 +35,16 @@ public class Genero {
 		this.nombre = nombre;
 	}
 
-	public boolean revisarGenerosExistentes(RowSet rs) throws SQLException {
-		rs.setCommand("select idGeneros from Generos");
-		rs.execute();
-		return true;
+	public boolean revisarGenerosExistentes() throws SQLException {
+		try(JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()){
+			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
+			rowSet.setUsername("alumno");
+			rowSet.setPassword("abc123..");
+			rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
+			rowSet.setInt(1, this.idGenero);
+			rowSet.execute();
+			return false;
+		}
 	}
 
 }

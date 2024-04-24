@@ -14,9 +14,9 @@ public class Autor {
 	public Autor(int idAutor, String dni, String apellidos, String nombre) {
 
 		this.idAutor = idAutor;
-		this.dni = this.validarDni(dni);
+		this.dni = dni;
 		this.apellidos = apellidos;
-		Nombre = nombre;
+		this.Nombre = nombre;
 	}
 
 	public Autor() {
@@ -53,14 +53,12 @@ public class Autor {
 	public void setNombre(String nombre) {
 		Nombre = nombre;
 	}
-	
-	public String validarDni(String dni) {
-		if(dni.length()!=9 || !dni.matches(".*[T|R|W|A|G|M|Y|F|P|D|X|B|N|J|Z|S|Q|V|H|L]")){
-			return "DNI incorrecto";
-		}else {
-			System.out.println("DNI correcto");
-			return dni;
-		}
-		
+
+	@Override
+	public String toString() {
+		return "Autor [idAutor=" + idAutor + ", dni=" + dni + ", apellidos=" + apellidos + ", Nombre=" + Nombre + "]";
 	}
+
+	
+	
 }
