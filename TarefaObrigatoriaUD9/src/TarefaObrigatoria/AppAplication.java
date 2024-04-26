@@ -9,8 +9,8 @@ public class AppAplication {
 
 	public static void main(String[] args) {
 		App a = new App();
-		Podcast p = new Podcast(4, "", 0, "", 4, "", "", new Autor(99, "", "", ""));
-		Genero g = new Genero(7, "");
+		Podcast p = new Podcast(4, "", 0, "", 4, "", "", new Autor(99, "", "", ""));//Estan vacios los valores del constructror para añadir los que quieras
+		Genero g = new Genero(7, "");//Estan vacios los valores del constructror para añadir los que quieras
 		Scanner sc = new Scanner(System.in);
 		boolean stop=true;
 		try (JdbcRowSet rowSet = a.openConnectionAtHome()) {

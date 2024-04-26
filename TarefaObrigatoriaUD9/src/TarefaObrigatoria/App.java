@@ -283,7 +283,7 @@ public class App implements PodcastInterface {
 
 	// metodo con conexion de casa
 	public boolean revisarGenCasa(int idGenero) throws SQLException {
-		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
+		RowSet rowSet= openConnectionAtHome();
 			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
 			rowSet.setUsername("root");
 			rowSet.setPassword("161204");
@@ -291,12 +291,12 @@ public class App implements PodcastInterface {
 			rowSet.setInt(1, idGenero);
 			rowSet.execute();
 			return rowSet.next();
-		}
+		
 	}
 
 	// metodo con conexion de instituto
 	public boolean revisarGenerosExistentes(int idGenero) throws SQLException {
-		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
+		RowSet rowSet= openConnectionAtHome();
 			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
 			rowSet.setUsername("alumno");
 			rowSet.setPassword("abc123..");
@@ -304,12 +304,12 @@ public class App implements PodcastInterface {
 			rowSet.setInt(1, idGenero);
 			rowSet.execute();
 			return rowSet.next();
-		}
+		
 	}
 
 	// este metodo es con la conexion en casa
 	public boolean revisarPodCasa(int idPodcast) throws SQLException {
-		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
+		RowSet rowSet= openConnectionAtHome();
 			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
 			rowSet.setUsername("root");
 			rowSet.setPassword("161204");
@@ -317,13 +317,13 @@ public class App implements PodcastInterface {
 			rowSet.setInt(1, idPodcast);
 			rowSet.execute();
 			return rowSet.next();
-		}
+		
 
 	}
 
 	// este metodo es con la conexion en clase
 	public boolean revisarPodcastExistenetes(int idPodcast) throws SQLException {
-		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
+		JdbcRowSet rowSet = openConnectionAtHome();
 			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
 			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
 			rowSet.setUsername("alumno");
@@ -332,24 +332,9 @@ public class App implements PodcastInterface {
 			rowSet.setInt(1, idPodcast);
 			rowSet.execute();
 			return rowSet.next();
-		}
+	
 
 	}
 
-	public static void main(String[] args) {
-		App a = new App();
-		Podcast p = new Podcast(4, "venezuela", 0, "alta", 4, "mucha", "Mp4", new Autor(99, "", "", ""));
-		Genero g = new Genero(7, "Peleas");
-		try (JdbcRowSet rowSet = a.openConnectionAtHome()) {
-			//a.insertPodcast(p, rowSet);
-			//a.newGenPodcast(g, rowSet);
-			//a.deletePodcast(p);
-			//a.viewAllPodcast(rowSet);
-			//a.findByPodcastId(1);
-			a.updatePodcast(4, rowSet);
-			System.out.println(a.viewAllPodcast);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 }
