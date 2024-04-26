@@ -284,9 +284,6 @@ public class App implements PodcastInterface {
 	// metodo con conexion de casa
 	public boolean revisarGenCasa(int idGenero) throws SQLException {
 		RowSet rowSet= openConnectionAtHome();
-			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
-			rowSet.setUsername("root");
-			rowSet.setPassword("161204");
 			rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
 			rowSet.setInt(1, idGenero);
 			rowSet.execute();
@@ -297,9 +294,6 @@ public class App implements PodcastInterface {
 	// metodo con conexion de instituto
 	public boolean revisarGenerosExistentes(int idGenero) throws SQLException {
 		RowSet rowSet= openConnectionAtHome();
-			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
-			rowSet.setUsername("alumno");
-			rowSet.setPassword("abc123..");
 			rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
 			rowSet.setInt(1, idGenero);
 			rowSet.execute();
@@ -310,9 +304,6 @@ public class App implements PodcastInterface {
 	// este metodo es con la conexion en casa
 	public boolean revisarPodCasa(int idPodcast) throws SQLException {
 		RowSet rowSet= openConnectionAtHome();
-			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
-			rowSet.setUsername("root");
-			rowSet.setPassword("161204");
 			rowSet.setCommand("select idPodcast from Podcast where idPodcast = ?");
 			rowSet.setInt(1, idPodcast);
 			rowSet.execute();
@@ -324,10 +315,6 @@ public class App implements PodcastInterface {
 	// este metodo es con la conexion en clase
 	public boolean revisarPodcastExistenetes(int idPodcast) throws SQLException {
 		JdbcRowSet rowSet = openConnectionAtHome();
-			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
-			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
-			rowSet.setUsername("alumno");
-			rowSet.setPassword("abc123..");
 			rowSet.setCommand("select idPodcast from Podcast where idPodcast = ?");
 			rowSet.setInt(1, idPodcast);
 			rowSet.execute();
