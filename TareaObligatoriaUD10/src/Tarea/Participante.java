@@ -8,12 +8,17 @@ public class Participante {
 	private String categoria;
 
 	public Participante(String nombre, String apellidos, String sexo, int edad) {
+		if(edad>30) {
+			System.out.println("La edad del participante no es perimitida");
+			return;
+		}else {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.sexo = sexo;
 		this.edad = edad;
 		this.categoria = calcularCategoria(this.edad);
-	}
+		}
+		}
 
 	public Participante() {
 	}
@@ -59,6 +64,7 @@ public class Participante {
 	}
 
 	private String calcularCategoria(int edad) {
+		
 		if (edad < 8) {
 			setCategoria("Benjamin");
 		} else if (edad >= 8 && edad <= 10) {
@@ -73,7 +79,18 @@ public class Participante {
 			return "Senior";
 		}
 		return null;
-
+		
+		
+		
+		
 	}
 
+	@Override
+	public String toString() {
+		return "nombre: " + nombre + " apellidos: " + apellidos + " sexo: " + sexo + " edad: " + edad
+				+ " categoria: " + categoria;
+	}
+
+	
+	
 }
