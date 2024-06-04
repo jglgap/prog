@@ -1,4 +1,4 @@
-package pokemon;
+	package pokemon;
 
 import java.util.Scanner;
 

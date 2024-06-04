@@ -23,6 +23,7 @@ public class Cajero {
 	@Override
 	public String toString() {
 		return "Cajero [ces=" + ces + "]";
+		
 	}
 	
 }

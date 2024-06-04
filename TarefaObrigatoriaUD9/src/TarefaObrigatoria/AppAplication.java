@@ -13,7 +13,7 @@ public class AppAplication {
 		Genero g = new Genero(7, "");//Estan vacios los valores del constructror para añadir los que quieras
 		Scanner sc = new Scanner(System.in);
 		boolean stop=true;
-		try (JdbcRowSet rowSet = a.openConnectionAtHome()) {
+		try (JdbcRowSet rowSet = a.openConnection()) {
 		while(stop) {
 			System.out.println("Elige lo que deseas hacer");
 			System.out.println("1-Insertar Podcast\n"

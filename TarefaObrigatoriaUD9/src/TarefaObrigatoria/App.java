@@ -16,32 +16,28 @@ import javax.sql.rowset.RowSetProvider;
 public class App implements PodcastInterface {
 
 	List<Podcast> viewAllPodcast = new ArrayList<>();
+	private static String url = "jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd";
+	// private static String url="jdbc:mariadb://localhost:3306/RASRpodcast_bd";
+	// //en casa
+	private static String nomeUsuario = "alumno";
+	// private static String nomeUsuario="root"; //en casa
+	private String contraseña = "abc123..";
+	// private String contraseña="161204"; //en casa
 
-	public JdbcRowSet openConnectionInSchool() throws SQLException {
+	public JdbcRowSet openConnection() throws SQLException {
 		// conexion en clase
 		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
-			rowSet.setUrl("jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd");
-			rowSet.setUsername("alumno");
-			rowSet.setPassword("abc123..");
+			rowSet.setUrl(url);
+			rowSet.setUsername(nomeUsuario);
+			rowSet.setPassword(contraseña);
 			return rowSet;
 		}
-	}
-
-	public JdbcRowSet openConnectionAtHome() throws SQLException {
-		// conexion en casa
-		try (JdbcRowSet rowSet = RowSetProvider.newFactory().createJdbcRowSet()) {
-			rowSet.setUrl("jdbc:mariadb://localhost:3306/RASRpodcast_bd");
-			rowSet.setUsername("root");
-			rowSet.setPassword("161204");
-			return rowSet;
-		}
-
 	}
 
 	private int revisarAutores(Podcast p) throws SQLException {
 		List<Integer> idAut = new ArrayList<>();
 		// RowSet rs = openConnectionInSchool();
-		RowSet rs = openConnectionAtHome();
+		RowSet rs = openConnection();
 
 		rs.setCommand("select idAutor from Autor");
 		rs.execute();
@@ -60,8 +56,7 @@ public class App implements PodcastInterface {
 
 	@Override
 	public boolean insertPodcast(Podcast p, RowSet rs) throws SQLException {
-		// if (revisarPodcastExistenetes(p.getIdPodcast()) {
-		if (revisarPodCasa(p.getIdPodcast())) {
+		if (revisarPodcastExistenetes(p.getIdPodcast())) {
 			System.out.println("ya hay un podcast con ese ID");
 			return false;
 		} else {
@@ -84,8 +79,7 @@ public class App implements PodcastInterface {
 
 	@Override
 	public boolean newGenPodcast(Genero g, RowSet rs) throws SQLException {
-		// if (revisarGenerosExistentes(g.getIdGenero())) {
-		if (revisarGenCasa(g.getIdGenero())) {
+		if (revisarGenerosExistentes(g.getIdGenero())) {
 			System.out.println("Ya hay un genero con ese ID");
 			return false;
 		} else {
@@ -105,60 +99,58 @@ public class App implements PodcastInterface {
 		p.setIdPodcast(id);
 		rs.setCommand("select idPodcat, idGenero from gen_pod");
 		rs.execute();
-		while(rs.next()) {
+		while (rs.next()) {
 			p.gen.add(rs.getInt("idGenero"));
 		}
 		Scanner sc = new Scanner(System.in);
 		int parar = 0;
 		while (parar == 0) {
-			System.out.println("Elige lo que deseas hacer\n" + "1-Añadir un nuevo genero\n" + "2-Eliminar genero\n"
-					+ "3-Salir");
+			System.out.println(
+					"Elige lo que deseas hacer\n" + "1-Añadir un nuevo genero\n" + "2-Eliminar genero\n" + "3-Salir");
 			try {
 				int opc = sc.nextInt();
 				switch (opc) {
-				case 1: {
-					System.out.println("introduzca el id del genero que va a agregar");
-					int idGen = sc.nextInt();
-					if (revisarGenCasa(idGen) && revisarPodCasa(id)) {
-						rs.setCommand("select * from gen_pod");
-						rs.execute();
-						rs.moveToInsertRow();
-						rs.updateInt("idPodcat", id);
-						rs.updateInt("idGenero", idGen);
-						rs.insertRow();
-						p.gen.add(idGen);
-						
-					} else {
-						
-					}
-					break;
-				}
-				case 2: {
-					System.out.println("introzuca el id del genero que va eliminar");
-					int idGen = sc.nextInt();
-					if (p.gen.contains(idGen) && (revisarGenCasa(idGen) && revisarPodCasa(id))) {
-						// String sURL =
-						// "jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd";
-						String sURL = "jdbc:mariadb://localhost:3306/RASRpodcast_bd";
-						// try (Connection con = DriverManager.getConnection(sURL, "alumno",
-						// "abc123..")) {//conexion insti
-						try (Connection con = DriverManager.getConnection(sURL, "root", "161204")) {// conexion casa
-							try (PreparedStatement stmt = con.prepareStatement("DELETE from gen_pod WHERE idPodcat = ?")) {
-								stmt.setInt(1, p.getIdPodcast());
-								stmt.executeUpdate();
-								p.gen.remove(idGen);
-							
-							}
+					case 1: {
+						System.out.println("introduzca el id del genero que va a agregar");
+						int idGen = sc.nextInt();
+						if (revisarGenerosExistentes(idGen) && revisarPodcastExistenetes(id)) {
+							rs.setCommand("select * from gen_pod");
+							rs.execute();
+							rs.moveToInsertRow();
+							rs.updateInt("idPodcat", id);
+							rs.updateInt("idGenero", idGen);
+							rs.insertRow();
+							p.gen.add(idGen);
+
+						} else {
+
 						}
-					} else {
-						System.out.println("No hay un podcast con ese genero");
-						
+						break;
 					}
-					break;
-				}
-				case 3:
-					parar=1;
-					break;
+					case 2: {
+						System.out.println("introzuca el id del genero que va eliminar");
+						int idGen = sc.nextInt();
+						if (p.gen.contains(idGen)
+								&& (revisarGenerosExistentes(idGen) && revisarPodcastExistenetes(id))) {
+
+							try (Connection con = DriverManager.getConnection(url, nomeUsuario, contraseña)) {
+								try (PreparedStatement stmt = con
+										.prepareStatement("DELETE from gen_pod WHERE idPodcat = ?")) {
+									stmt.setInt(1, p.getIdPodcast());
+									stmt.executeUpdate();
+									p.gen.remove(idGen);
+
+								}
+							}
+						} else {
+							System.out.println("No hay un podcast con ese genero");
+
+						}
+						break;
+					}
+					case 3:
+						parar = 1;
+						break;
 				}
 			} catch (InputMismatchException e) {
 				e.printStackTrace();
@@ -190,7 +182,7 @@ public class App implements PodcastInterface {
 
 	private Autor checkAuthor(int idAutor) throws SQLException {
 		// RowSet rowSet = openConnectionInSchool();
-		RowSet rowSet = openConnectionAtHome();
+		RowSet rowSet = openConnection();
 		rowSet.setCommand("select idAutor, dni, apellidos, nombre from Autor");
 		rowSet.execute();
 		while (rowSet.next()) {
@@ -206,11 +198,8 @@ public class App implements PodcastInterface {
 
 	@Override
 	public boolean deletePodcast(Podcast p) throws SQLException {
-		// String sURL =
-		// "jdbc:mariadb://dbalumnos.sanclemente.local:3314/RASRpodcast_bd";
-		String sURL = "jdbc:mariadb://localhost:3306/RASRpodcast_bd";
-//		try (Connection con = DriverManager.getConnection(sURL, "alumno", "abc123..")) {//conexion insti
-		try (Connection con = DriverManager.getConnection(sURL, "root", "161204")) {// conexion casa
+
+		try (Connection con = DriverManager.getConnection(url, nomeUsuario, contraseña)) {
 			try (PreparedStatement stmt = con.prepareStatement("DELETE from Podcast WHERE idPodcast = ?")) {
 				stmt.setInt(1, p.getIdPodcast());
 				stmt.executeUpdate();
@@ -221,8 +210,8 @@ public class App implements PodcastInterface {
 
 	@Override
 	public void findByPodcastId(int id) throws SQLException {
-		// RowSet rs = openConnectionInSchool();
-		RowSet rs = openConnectionAtHome();
+		RowSet rs = openConnection();
+
 		rs.setCommand("select idPodcast,titulo,tipo,calidad,duracion,periocidad,formato_video,autor from Podcast");
 		rs.execute();
 		rs.absolute(id);
@@ -242,37 +231,37 @@ public class App implements PodcastInterface {
 			try {
 				int caso = sc.nextInt();
 				switch (caso) {
-				case 1:
-					if (rs.previous()) {
-						System.out.println("idPodcast: " + rs.getInt("idPodcast"));
-						System.out.println("Titulo: " + rs.getString("titulo"));
-						System.out.println("Tipo: " + rs.getInt("tipo"));
-						System.out.println("calidad: " + rs.getString("calidad"));
-						System.out.println("Duracion: " + rs.getInt("duracion"));
-						System.out.println("Periocidad: " + rs.getString("periocidad"));
-						System.out.println("Formato de video: " + rs.getString("formato_video"));
-						System.out.println("Autor: " + rs.getInt("autor"));
-					} else {
-						System.out.println("No hay fila previa");
-					}
-					break;
-				case 2:
-					if (rs.next()) {
-						System.out.println("idPodcast: " + rs.getInt("idPodcast"));
-						System.out.println("Titulo: " + rs.getString("titulo"));
-						System.out.println("Tipo: " + rs.getInt("tipo"));
-						System.out.println("calidad: " + rs.getString("calidad"));
-						System.out.println("Duracion: " + rs.getInt("duracion"));
-						System.out.println("Periocidad: " + rs.getString("periocidad"));
-						System.out.println("Formato de video: " + rs.getString("formato_video"));
-						System.out.println("Autor: " + rs.getInt("autor"));
-					} else {
-						System.out.println("No hay caso posterior");
-					}
-					break;
-				case 3:
-					parar = 1;
-					break;
+					case 1:
+						if (rs.previous()) {
+							System.out.println("idPodcast: " + rs.getInt("idPodcast"));
+							System.out.println("Titulo: " + rs.getString("titulo"));
+							System.out.println("Tipo: " + rs.getInt("tipo"));
+							System.out.println("calidad: " + rs.getString("calidad"));
+							System.out.println("Duracion: " + rs.getInt("duracion"));
+							System.out.println("Periocidad: " + rs.getString("periocidad"));
+							System.out.println("Formato de video: " + rs.getString("formato_video"));
+							System.out.println("Autor: " + rs.getInt("autor"));
+						} else {
+							System.out.println("No hay fila previa");
+						}
+						break;
+					case 2:
+						if (rs.next()) {
+							System.out.println("idPodcast: " + rs.getInt("idPodcast"));
+							System.out.println("Titulo: " + rs.getString("titulo"));
+							System.out.println("Tipo: " + rs.getInt("tipo"));
+							System.out.println("calidad: " + rs.getString("calidad"));
+							System.out.println("Duracion: " + rs.getInt("duracion"));
+							System.out.println("Periocidad: " + rs.getString("periocidad"));
+							System.out.println("Formato de video: " + rs.getString("formato_video"));
+							System.out.println("Autor: " + rs.getInt("autor"));
+						} else {
+							System.out.println("No hay caso posterior");
+						}
+						break;
+					case 3:
+						parar = 1;
+						break;
 				}
 			} catch (InputMismatchException e) {
 				e.printStackTrace();
@@ -281,47 +270,22 @@ public class App implements PodcastInterface {
 
 	}
 
-	// metodo con conexion de casa
-	public boolean revisarGenCasa(int idGenero) throws SQLException {
-		RowSet rowSet= openConnectionAtHome();
-			rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
-			rowSet.setInt(1, idGenero);
-			rowSet.execute();
-			return rowSet.next();
-		
-	}
-
-	// metodo con conexion de instituto
 	public boolean revisarGenerosExistentes(int idGenero) throws SQLException {
-		RowSet rowSet= openConnectionAtHome();
-			rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
-			rowSet.setInt(1, idGenero);
-			rowSet.execute();
-			return rowSet.next();
-		
-	}
-
-	// este metodo es con la conexion en casa
-	public boolean revisarPodCasa(int idPodcast) throws SQLException {
-		RowSet rowSet= openConnectionAtHome();
-			rowSet.setCommand("select idPodcast from Podcast where idPodcast = ?");
-			rowSet.setInt(1, idPodcast);
-			rowSet.execute();
-			return rowSet.next();
-		
+		RowSet rowSet = openConnection();
+		rowSet.setCommand("select idGeneros from Generos where idGeneros = ?");
+		rowSet.setInt(1, idGenero);
+		rowSet.execute();
+		return rowSet.next();
 
 	}
 
-	// este metodo es con la conexion en clase
 	public boolean revisarPodcastExistenetes(int idPodcast) throws SQLException {
-		JdbcRowSet rowSet = openConnectionAtHome();
-			rowSet.setCommand("select idPodcast from Podcast where idPodcast = ?");
-			rowSet.setInt(1, idPodcast);
-			rowSet.execute();
-			return rowSet.next();
-	
+		JdbcRowSet rowSet = openConnection();
+		rowSet.setCommand("select idPodcast from Podcast where idPodcast = ?");
+		rowSet.setInt(1, idPodcast);
+		rowSet.execute();
+		return rowSet.next();
 
 	}
-
 
 }
