@@ -1,5 +1,6 @@
 package Examen;
 
+
 public class Slot {
 	private int idSlot;
 	private String dia;
